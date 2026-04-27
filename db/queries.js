@@ -360,7 +360,13 @@ async function toggleSubtask(db, taskId, subtaskTitle, newDone) {
  */
 
 async function deleteTask(db, taskId) {
-  
+  const result = await db.collection("tasks").deleteOne({
+    _id: new ObjectId(taskId)
+  });
+
+  return {
+    deletedCount: result.deletedCount
+  };
 }
 
 /**
