@@ -112,7 +112,7 @@ async function listUserProjects(db, ownerId) {
  */
 async function createProject(db, projectData) {
   const project = {
-    ownerid: projectData.ownerId,
+    ownerId: projectData.ownerId,
     name: projectData.name,
     archived: false,
     createdAt: new Date()
@@ -168,8 +168,16 @@ async function archiveProject(db, projectId) {
  *       the caller passed one. Then chain .sort({ priority: -1, createdAt: -1 }).
  */
 async function listProjectTasks(db, projectId, status) {
-  // TODO: implement
-  throw new Error('listProjectTasks not implemented');
+  const filter={
+    projectId:projectId
+  }
+  if(status){
+    filter.status=status
+  }
+   return await db.collection('tasks')
+    .find(filter)
+    .sort({ priority: -1, createdAt: -1 })
+    .toArray();
 }
 
 /**
@@ -194,8 +202,22 @@ async function listProjectTasks(db, projectId, status) {
  * Hint: insertOne. Apply defaults for any missing optional fields.
  */
 async function createTask(db, taskData) {
-  // TODO: implement
-  throw new Error('createTask not implemented');
+  const task = {
+    ownerId: taskData.ownerId,
+    projectId: taskData.projectId,
+    title: taskData.title,
+    priority: taskData.priority ?? 1,
+    tags: taskData.tags ?? [],
+    subtasks: taskData.subtasks ?? [],
+    status: "todo",
+    createdAt: new Date()
+  };
+
+  const result = await db.collection("tasks").insertOne(task);
+
+  return {
+    insertedId: result.insertedId
+  };
 }
 
 /**
@@ -211,8 +233,7 @@ async function createTask(db, taskData) {
  * Hint: updateOne + $set.
  */
 async function updateTaskStatus(db, taskId, newStatus) {
-  // TODO: implement
-  throw new Error('updateTaskStatus not implemented');
+  
 }
 
 /**
@@ -231,9 +252,9 @@ async function updateTaskStatus(db, taskId, newStatus) {
  *
  * Hint: which array operator silently skips duplicates? It is NOT $push.
  */
+
 async function addTaskTag(db, taskId, tag) {
-  // TODO: implement
-  throw new Error('addTaskTag not implemented');
+ 
 }
 
 /**
@@ -252,9 +273,9 @@ async function addTaskTag(db, taskId, tag) {
  *
  * Hint: $pull.
  */
+
 async function removeTaskTag(db, taskId, tag) {
-  // TODO: implement
-  throw new Error('removeTaskTag not implemented');
+  
 }
 
 /**
@@ -283,11 +304,10 @@ async function removeTaskTag(db, taskId, tag) {
  *       reference the subtask by title (so Mongo knows which array element
  *       matched), and your $set path uses `subtasks.$.done`.
  */
-async function toggleSubtask(db, taskId, subtaskTitle, newDone) {
-  // TODO: implement
-  throw new Error('toggleSubtask not implemented');
-}
 
+async function toggleSubtask(db, taskId, subtaskTitle, newDone) {
+  
+}
 /**
  * Query 12: deleteTask
  * -------------------------------------------------------------
@@ -299,9 +319,9 @@ async function toggleSubtask(db, taskId, subtaskTitle, newDone) {
  *
  * Hint: deleteOne.
  */
+
 async function deleteTask(db, taskId) {
-  // TODO: implement
-  throw new Error('deleteTask not implemented');
+  
 }
 
 /**
@@ -323,9 +343,9 @@ async function deleteTask(db, taskId) {
  * Hint: the operator that says "field's value is one of these" is $in.
  *       Build the filter conditionally based on whether projectId was passed.
  */
+
 async function searchNotes(db, ownerId, tags, projectId) {
-  // TODO: implement
-  throw new Error('searchNotes not implemented');
+ 
 }
 
 /**
@@ -361,9 +381,9 @@ async function searchNotes(db, ownerId, tags, projectId) {
  * Hint: $lookup returns an ARRAY (because joins can match many).
  *       $unwind turns a 1-element array into the element itself.
  */
+
 async function projectTaskSummary(db, ownerId) {
-  // TODO: implement
-  throw new Error('projectTaskSummary not implemented');
+  
 }
 
 /**
@@ -394,9 +414,9 @@ async function projectTaskSummary(db, ownerId) {
  * Hint: putting $sort and $limit BEFORE $lookup is intentional —
  *       you only want to look up 10 projects, not all of them.
  */
+
 async function recentActivityFeed(db, ownerId) {
-  // TODO: implement
-  throw new Error('recentActivityFeed not implemented');
+  
 }
 
 // =============================================================================
