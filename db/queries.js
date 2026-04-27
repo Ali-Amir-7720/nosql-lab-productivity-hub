@@ -291,7 +291,15 @@ async function addTaskTag(db, taskId, tag) {
  */
 
 async function removeTaskTag(db, taskId, tag) {
-  
+  const result = await db.collection("tasks").updateOne(
+    { _id: new ObjectId(taskId) },
+    { $pull: { tags: tag } }
+  );
+
+  return {
+    matchedCount: result.matchedCount,
+    modifiedCount: result.modifiedCount
+  };
 }
 
 /**
