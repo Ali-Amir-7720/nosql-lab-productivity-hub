@@ -390,7 +390,21 @@ async function deleteTask(db, taskId) {
  */
 
 async function searchNotes(db, ownerId, tags, projectId) {
- 
+ const filter = {
+    ownerId: new ObjectId(ownerId)
+  };
+  if (projectId) {
+    filter.projectId = new ObjectId(projectId);
+  }
+  if (tags && tags.length > 0) {
+    filter.tags = { $in: tags };
+  }
+
+  const notes = await db.collection("notes")
+    .find(filter)
+    .toArray();
+
+  return notes;
 }
 
 /**
