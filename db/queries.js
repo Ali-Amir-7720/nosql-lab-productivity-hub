@@ -262,7 +262,15 @@ async function updateTaskStatus(db, taskId, newStatus) {
  */
 
 async function addTaskTag(db, taskId, tag) {
- 
+ const result = await db.collection("tasks").updateOne(
+    { _id: new ObjectId(taskId) },
+    { $addToSet: { tags: tag } }
+  );
+
+  return {
+    matchedCount: result.matchedCount,
+    modifiedCount: result.modifiedCount
+  };
 }
 
 /**
