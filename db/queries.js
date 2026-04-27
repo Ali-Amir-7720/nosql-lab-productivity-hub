@@ -440,63 +440,50 @@ async function searchNotes(db, ownerId, tags, projectId) {
  * Hint: $lookup returns an ARRAY (because joins can match many).
  *       $unwind turns a 1-element array into the element itself.
  */
-
 async function projectTaskSummary(db, ownerId) {
-  const projects = await db.collection("projects").aggregate([
+  return await db.collection("tasks").aggregate([
     {
       $match: {
-        ownerId: new ObjectId(ownerId),
-        archived: false
+        ownerId: new ObjectId(ownerId)
+      }
+    },
+    {
+      $group: {
+        _id: "$projectId",
+        todo: {
+          $sum: { $cond: [{ $eq: ["$status", "todo"] }, 1, 0] }
+        },
+        inProgress: {
+          $sum: { $cond: [{ $eq: ["$status", "in-progress"] }, 1, 0] }
+        },
+        done: {
+          $sum: { $cond: [{ $eq: ["$status", "done"] }, 1, 0] }
+        },
+        total: { $sum: 1 }
       }
     },
     {
       $lookup: {
-        from: "tasks",
+        from: "projects",
         localField: "_id",
-        foreignField: "projectId",
-        as: "tasks"
+        foreignField: "_id",
+        as: "project"
       }
     },
     {
-      $addFields: {
-        totalTasks: { $size: "$tasks" },
-        todo: {
-          $size: {
-            $filter: {
-              input: "$tasks",
-              as: "t",
-              cond: { $eq: ["$$t.status", "todo"] }
-            }
-          }
-        },
-        inProgress: {
-          $size: {
-            $filter: {
-              input: "$tasks",
-              as: "t",
-              cond: { $eq: ["$$t.status", "in-progress"] }
-            }
-          }
-        },
-        done: {
-          $size: {
-            $filter: {
-              input: "$tasks",
-              as: "t",
-              cond: { $eq: ["$$t.status", "done"] }
-            }
-          }
-        }
-      }
+      $unwind: "$project"
     },
     {
       $project: {
-        tasks: 0
+        _id: 1,
+        projectName: "$project.name",
+        todo: 1,
+        inProgress: 1,
+        done: 1,
+        total: 1
       }
     }
   ]).toArray();
-
-  return projects;
 }
 
 /**
