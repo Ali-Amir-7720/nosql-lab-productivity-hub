@@ -44,8 +44,13 @@ const { ObjectId } = require('mongodb');
  * Hint: insertOne. Nothing fancy.
  */
 async function signupUser(db, userData) {
-  // TODO: implement
-  throw new Error('signupUser not implemented');
+  const user=await db.collections('users').insertOne({
+    email:userData.email,
+    passwordHash:userData.passwordHash,
+    name:userData.name,
+    createdAt:new Date()
+  })
+  return {insertedId:user.insertedId}
 }
 
 /**

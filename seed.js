@@ -29,19 +29,21 @@ const { connect } = require('./db/connection');
   // =============================================================================
   //  TODO: Insert your seed data below.
   //
+  await db.collection('users').createIndex({ email: 1 }, { unique: true });
   const hashedPassword=await bcrypt.hash('12345678',10)
-  const user1=await db.collection('users').insertOne({
-    name : 'Ali',
-    email:'ali@gmail.com',
-    password:hashedPassword,
-    createdAt:new Date()
-  })
-  const user2=await db.collection('users').insertOne({
-    name : 'Saad',
-    email:'saad@gmail.com',
-    password:hashedPassword,
-    createdAt:new Date()
-  })
+  const user1 = await db.collection('users').insertOne({
+  name: 'Ali',
+  email: 'ali@gmail.com',
+  passwordHash: hashedPassword,
+  createdAt: new Date()
+});
+
+const user2 = await db.collection('users').insertOne({
+  name: 'Saad',
+  email: 'saad@gmail.com',
+  passwordHash: hashedPassword,
+  createdAt: new Date()
+});
 //project{
 //  _id:Objectid,
 // ownerid:ObjectId(UserId),
@@ -100,7 +102,7 @@ const project4 = await db.collection('projects').insertOne({
   createdAt: new Date()
 });
 
-const task2 = await db.collection('tasks').insertOne({
+const task6 = await db.collection('tasks').insertOne({
   ownerId: user1.insertedId,
   projectId: project2.insertedId,
   title: "Finalize Design",
