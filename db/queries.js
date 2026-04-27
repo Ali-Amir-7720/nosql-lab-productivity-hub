@@ -529,7 +529,44 @@ async function projectTaskSummary(db, ownerId) {
  */
 
 async function recentActivityFeed(db, ownerId) {
-  
+  const activities = await db.collection("tasks")
+    .aggregate([
+      {
+        $match: {
+          ownerId: new ObjectId(ownerId)
+        }
+      },
+      {
+        $sort: { createdAt: -1 }
+      },
+      {
+        $limit: 20
+      },
+      {
+        $lookup: {
+          from: "projects",
+          localField: "projectId",
+          foreignField: "_id",
+          as: "project"
+        }
+      },
+      {
+        $unwind: {
+          path: "$project",
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $project: {
+          title: 1,
+          status: 1,
+          createdAt: 1,
+          "project.name": 1
+        }
+      }
+    ])
+    .toArray();
+  return activities;
 }
 
 // =============================================================================
