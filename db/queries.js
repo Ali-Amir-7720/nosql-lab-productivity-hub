@@ -442,7 +442,61 @@ async function searchNotes(db, ownerId, tags, projectId) {
  */
 
 async function projectTaskSummary(db, ownerId) {
-  
+  const projects = await db.collection("projects").aggregate([
+    {
+      $match: {
+        ownerId: new ObjectId(ownerId),
+        archived: false
+      }
+    },
+    {
+      $lookup: {
+        from: "tasks",
+        localField: "_id",
+        foreignField: "projectId",
+        as: "tasks"
+      }
+    },
+    {
+      $addFields: {
+        totalTasks: { $size: "$tasks" },
+        todo: {
+          $size: {
+            $filter: {
+              input: "$tasks",
+              as: "t",
+              cond: { $eq: ["$$t.status", "todo"] }
+            }
+          }
+        },
+        inProgress: {
+          $size: {
+            $filter: {
+              input: "$tasks",
+              as: "t",
+              cond: { $eq: ["$$t.status", "in-progress"] }
+            }
+          }
+        },
+        done: {
+          $size: {
+            $filter: {
+              input: "$tasks",
+              as: "t",
+              cond: { $eq: ["$$t.status", "done"] }
+            }
+          }
+        }
+      }
+    },
+    {
+      $project: {
+        tasks: 0
+      }
+    }
+  ]).toArray();
+
+  return projects;
 }
 
 /**
