@@ -91,7 +91,7 @@ async function loginFindUser(db, email) {
 async function listUserProjects(db, ownerId) {
   return db.collection('projects').find({
    ownerId,
-   archvied:false
+   archived:false
   })
   .sort({createdAt:-1})
   .toArray()
@@ -111,8 +111,17 @@ async function listUserProjects(db, ownerId) {
  * Hint: insertOne again — just remember to add the defaults yourself.
  */
 async function createProject(db, projectData) {
-  // TODO: implement
-  throw new Error('createProject not implemented');
+  const project = {
+    ownerid: projectData.ownerId,
+    name: projectData.name,
+    archived: false,
+    createdAt: new Date()
+  };
+  const result = await db.collection("projects").insertOne(project);
+  console.log("Inserted:", result); 
+  return {
+    insertedId: result.insertedId
+  };
 }
 
 /**
@@ -131,8 +140,14 @@ async function createProject(db, projectData) {
  * Hint: updateOne with the $set operator.
  */
 async function archiveProject(db, projectId) {
-  // TODO: implement
-  throw new Error('archiveProject not implemented');
+  const result = await db.collection("projects").updateOne(
+    { _id: projectId },
+    { $set: { archived: true } }
+  );
+  return {
+    matchedCount: result.matchedCount,
+    modifiedCount: result.modifiedCount
+  };
 }
 
 /**

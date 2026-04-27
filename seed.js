@@ -67,14 +67,14 @@ const project2 = await db.collection('projects').insertOne({
 const project3 = await db.collection('projects').insertOne({
   name: 'E-commerce Platform',
   createdAt: new Date(),
-  archived:true,
+  archived:false,
   ownerId: user2.insertedId
 });
 
 const project4 = await db.collection('projects').insertOne({
   name: 'Linear regression',
   createdAt: new Date(),
-  archived:true
+  archived:true,
   ownerId: user2.insertedId
 });
   //  Sample task shape:
