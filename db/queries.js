@@ -69,9 +69,8 @@ async function signupUser(db, userData) {
  * Hint: findOne with an exact-match filter.
  */
 async function loginFindUser(db, email) {
-  db.findOne(db.email==email){
-    
-  }
+  return db.collection('users').findOne({email:email})
+  //bcrypt.compare(password, user.passwordHash)
 }
 
 /**
