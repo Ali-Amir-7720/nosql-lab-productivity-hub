@@ -53,24 +53,28 @@ const user2 = await db.collection('users').insertOne({
   const project1 = await db.collection('projects').insertOne({
   name: 'Cost Optimizer',
   createdAt: new Date(),
+  archived:false,
   ownerId: user1.insertedId
 });
 
 const project2 = await db.collection('projects').insertOne({
   name: 'Chess game',
   createdAt: new Date(),
+  archived:false,
   ownerId: user1.insertedId
 });
 
 const project3 = await db.collection('projects').insertOne({
   name: 'E-commerce Platform',
   createdAt: new Date(),
+  archived:true,
   ownerId: user2.insertedId
 });
 
 const project4 = await db.collection('projects').insertOne({
   name: 'Linear regression',
   createdAt: new Date(),
+  archived:true
   ownerId: user2.insertedId
 });
   //  Sample task shape:

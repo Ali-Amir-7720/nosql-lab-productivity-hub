@@ -36,6 +36,7 @@ For each collection, write the document shape (field name + type + required/opti
   _id:ObjectId,
   ownerid:ObjectId,
   name: string(required),
+  archived:bool,
   createdAt:Date(required)
 }
 ```
