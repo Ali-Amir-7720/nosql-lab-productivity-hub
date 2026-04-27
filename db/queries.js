@@ -330,7 +330,22 @@ async function removeTaskTag(db, taskId, tag) {
  */
 
 async function toggleSubtask(db, taskId, subtaskTitle, newDone) {
-  
+  const result = await db.collection("tasks").updateOne(
+    {
+      _id: new ObjectId(taskId),
+      "subtasks.title": subtaskTitle
+    },
+    {
+      $set: {
+        "subtasks.$.done": newDone
+      }
+    }
+  );
+
+  return {
+    matchedCount: result.matchedCount,
+    modifiedCount: result.modifiedCount
+  };
 }
 /**
  * Query 12: deleteTask
