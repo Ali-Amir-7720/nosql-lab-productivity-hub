@@ -44,7 +44,7 @@ const { ObjectId } = require('mongodb');
  * Hint: insertOne. Nothing fancy.
  */
 async function signupUser(db, userData) {
-  const user=await db.collections('users').insertOne({
+  const user=await db.collection('users').insertOne({
     email:userData.email,
     passwordHash:userData.passwordHash,
     name:userData.name,
@@ -69,8 +69,9 @@ async function signupUser(db, userData) {
  * Hint: findOne with an exact-match filter.
  */
 async function loginFindUser(db, email) {
-  // TODO: implement
-  throw new Error('loginFindUser not implemented');
+  db.findOne(db.email==email){
+    
+  }
 }
 
 /**
