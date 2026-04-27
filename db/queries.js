@@ -388,25 +388,28 @@ async function deleteTask(db, taskId) {
  * Hint: the operator that says "field's value is one of these" is $in.
  *       Build the filter conditionally based on whether projectId was passed.
  */
-
 async function searchNotes(db, ownerId, tags, projectId) {
- const filter = {
-    ownerId: new ObjectId(ownerId)
-  };
+  const filter = { ownerId: new ObjectId(ownerId) };
+
   if (projectId) {
     filter.projectId = new ObjectId(projectId);
   }
-  if (tags && tags.length > 0) {
-    filter.tags = { $in: tags };
+
+  if (tags) {
+    let tagArray = typeof tags === "string"
+      ? tags.split(",").map(t => t.trim()).filter(Boolean)
+      : tags;
+
+    if (tagArray.length > 0) {
+      filter.tags = { $in: tagArray };
+    }
   }
 
-  const notes = await db.collection("notes")
+  return await db.collection("notes")
     .find(filter)
+    .sort({ createdAt: -1 })
     .toArray();
-
-  return notes;
 }
-
 /**
  * Query 14: projectTaskSummary
  * -------------------------------------------------------------
