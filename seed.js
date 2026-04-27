@@ -33,15 +33,38 @@ const { connect } = require('./db/connection');
   const user1=await db.collection('users').insertone({
     name : 'Ali',
     email:'ali@gmail.com',
-    password:hashedPassword
+    password:hashedPassword,
+    createdAt:new Date()
   })
   const user2=await db.collection('users').insertone({
     name : 'Saad',
     email:'saad@gmail.com',
-    password:hashedPassword
+    password:hashedPassword,
+    createdAt:new Date()
   })
-
-  const project1=await db.collection('projects')
+//project{
+//  _id:Objectid,
+// ownerid:ObjectId(UserId),
+// name: string(required),
+//  createdAt:Date(required)
+//}
+  const project1=await db.collection('projects').insertOne({
+    name:'Proj 1',
+    createdAt:new Date(),
+    ownerid:user1     
+  })
+  const project2=await db.collection('projects').insertOne({
+    name:'Chess game',
+    createdAt:new Date()
+  })
+  const project3=await db.collection('projects').insertOne({
+    name : 'E-commerce Platform',
+    createdAt:new Date()
+  })
+  const project4=await db.collection('projects').insertOne({
+    name : 'Linear regression',
+    createdAt:new Date()
+  })
   //  Sample task shape:
   //    {
   //      ownerId: <ObjectId>,
@@ -57,6 +80,14 @@ const { connect } = require('./db/connection');
   //      createdAt: new Date()
   //    }
   // =============================================================================
+//
+//notes{
+//  _id:ObjectId,
+//  name:string(required),
+//  content:string,
+//  projectId:ObjectId,
+//  createdAt:Date(required)
+//}
 
   console.log('TODO: implement seed.js');
   process.exit(0);

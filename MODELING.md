@@ -33,21 +33,29 @@ For each collection, write the document shape (field name + type + required/opti
 ### projects
 ```
 {
-  _id:Objectid,
+  _id:ObjectId,
+  ownerid:ObjectId,
   name: string(required),
   createdAt:Date(required)
-
 }
 ```
 
 ### tasks
 ```
 {
-  _id:ObjectId,
-  projectId:ObjectId,
-  name : string(required),
-  projectId:ObjectId,
-  createdAt:Date(required)
+  ownerId: ObjectId,
+  projectId: ObjectId,
+  title: String,
+  status: String,       
+  priority: Number,
+  tags: [String],
+  subtasks: [
+    {
+      title: String,
+      done: Boolean
+    }
+  ],
+  createdAt: Date
 }
 ```
 
@@ -57,6 +65,7 @@ For each collection, write the document shape (field name + type + required/opti
   _id:ObjectId,
   name:string(required),
   content:string,
+  projectId:ObjectId,
   createdAt:Date(required)
 }
 ```
@@ -80,4 +89,4 @@ For each relationship, state whether you embedded or referenced, and **why** (on
 
 Name one field that exists on **some** documents but not **all** in the same collection. Explain why this is acceptable (or even useful) in MongoDB.
 
-> The content field in the notes collection may exist in some documents but be empty or omitted in others. This is acceptable in MongoDB because it allows notes to be either simple titles or detailed text entries without enforcing a fixed structure for every document.
+> The content field in the notes collection may exist in some documents but be empty or omitted in others. This is acceptable in MongoDB because it allows flexible document structure where notes can be either simple titles or detailed descriptions without enforcing a strict schema.
