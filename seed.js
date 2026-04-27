@@ -21,23 +21,27 @@ const { connect } = require('./db/connection');
   const db = await connect();
 
   // OPTIONAL: clear existing data so re-seeding is idempotent
-  // await db.collection('users').deleteMany({});
-  // await db.collection('projects').deleteMany({});
-  // await db.collection('tasks').deleteMany({});
-  // await db.collection('notes').deleteMany({});
+   await db.collection('users').deleteMany({});
+   await db.collection('projects').deleteMany({});
+   await db.collection('tasks').deleteMany({});
+   await db.collection('notes').deleteMany({});
 
   // =============================================================================
   //  TODO: Insert your seed data below.
   //
-  //  Hints:
-  //    - Hash passwords:   const hash = await bcrypt.hash('password123', 10);
-  //    - Capture inserted ids:
-  //        const u = await db.collection('users').insertOne({ ... });
-  //        const userId = u.insertedId;
-  //    - Use those ids when inserting projects/tasks/notes.
-  //    - Demonstrate schema flexibility: include at least one optional field
-  //      on SOME documents but not all (e.g. dueDate on some tasks only).
-  //
+  const hashedPassword=await bcrypt.hash('12345678',10)
+  const user1=await db.collection('users').insertone({
+    name : 'Ali',
+    email:'ali@gmail.com',
+    password:hashedPassword
+  })
+  const user2=await db.collection('users').insertone({
+    name : 'Saad',
+    email:'saad@gmail.com',
+    password:hashedPassword
+  })
+
+  const project1=await db.collection('projects')
   //  Sample task shape:
   //    {
   //      ownerId: <ObjectId>,
