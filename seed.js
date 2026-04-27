@@ -174,29 +174,39 @@ await db.collection('notes').insertMany([
     name: "Meeting Notes",
     content: "Discussed project deadlines",
     projectId: project1.insertedId,
+    ownerId: user1.insertedId,
+    tags: ["meeting", "project"],
     createdAt: new Date()
   },
   {
     name: "Chess Ideas",
     content: "Add AI opponent",
     projectId: project2.insertedId,
+    ownerId: user1.insertedId,
+    tags: ["ideas", "chess"],
     createdAt: new Date()
   },
   {
     name: "Random Idea",
     content: "Standalone productivity idea",
+    ownerId: user1.insertedId,
+    tags: ["ideas"],
     createdAt: new Date()
   },
   {
     name: "E-commerce UI Notes",
     content: "Improve checkout flow",
     projectId: project3.insertedId,
+    ownerId: user1.insertedId,
+    tags: ["ui", "urgent"],
     createdAt: new Date()
   },
   {
     name: "ML Notes",
     content: "Use normalization before training",
     projectId: project4.insertedId,
+    ownerId: user1.insertedId,
+    tags: ["ml", "ai"],
     createdAt: new Date()
   }
 ]);
