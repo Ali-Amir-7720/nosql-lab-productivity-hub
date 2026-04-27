@@ -79,7 +79,7 @@ const project4 = await db.collection('projects').insertOne({
 });
   //  Sample task shape:
       const task2=await db.collection('tasks').insertOne({
-        ownerId: user2.insertedId,
+        ownerId: user1.insertedId,
         projectId: project2.insertedId,
         title: "Write report introduction",
         status: "todo",
