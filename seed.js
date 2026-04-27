@@ -30,13 +30,13 @@ const { connect } = require('./db/connection');
   //  TODO: Insert your seed data below.
   //
   const hashedPassword=await bcrypt.hash('12345678',10)
-  const user1=await db.collection('users').insertone({
+  const user1=await db.collection('users').insertOne({
     name : 'Ali',
     email:'ali@gmail.com',
     password:hashedPassword,
     createdAt:new Date()
   })
-  const user2=await db.collection('users').insertone({
+  const user2=await db.collection('users').insertOne({
     name : 'Saad',
     email:'saad@gmail.com',
     password:hashedPassword,
@@ -48,38 +48,113 @@ const { connect } = require('./db/connection');
 // name: string(required),
 //  createdAt:Date(required)
 //}
-  const project1=await db.collection('projects').insertOne({
-    name:'Proj 1',
-    createdAt:new Date(),
-    ownerid:user1     
-  })
-  const project2=await db.collection('projects').insertOne({
-    name:'Chess game',
-    createdAt:new Date()
-  })
-  const project3=await db.collection('projects').insertOne({
-    name : 'E-commerce Platform',
-    createdAt:new Date()
-  })
-  const project4=await db.collection('projects').insertOne({
-    name : 'Linear regression',
-    createdAt:new Date()
-  })
+  const project1 = await db.collection('projects').insertOne({
+  name: 'Cost Optimizer',
+  createdAt: new Date(),
+  ownerId: user1.insertedId
+});
+
+const project2 = await db.collection('projects').insertOne({
+  name: 'Chess game',
+  createdAt: new Date(),
+  ownerId: user1.insertedId
+});
+
+const project3 = await db.collection('projects').insertOne({
+  name: 'E-commerce Platform',
+  createdAt: new Date(),
+  ownerId: user2.insertedId
+});
+
+const project4 = await db.collection('projects').insertOne({
+  name: 'Linear regression',
+  createdAt: new Date(),
+  ownerId: user2.insertedId
+});
   //  Sample task shape:
-  //    {
-  //      ownerId: <ObjectId>,
-  //      projectId: <ObjectId>,
-  //      title: "Write report introduction",
-  //      status: "todo",
-  //      priority: 3,
-  //      tags: ["writing", "urgent"],
-  //      subtasks: [
-  //        { title: "Outline sections", done: true },
-  //        { title: "Draft", done: false }
-  //      ],
-  //      createdAt: new Date()
-  //    }
+      const task2=await db.collection('tasks').insertOne({
+        ownerId: user2.insertedId,
+        projectId: project2.insertedId,
+        title: "Write report introduction",
+        status: "todo",
+        priority: 3,
+        tags: ["writing", "urgent"],
+        subtasks: [
+          { title: "Outline sections", done: true },
+          { title: "Draft", done: false }
+        ],
+        createdAt: new Date()
+      })
   // =============================================================================
+  const task1 = await db.collection('tasks').insertOne({
+  ownerId: user1.insertedId,
+  projectId: project1.insertedId,
+  title: "Fix Bugs",
+  status: "todo",
+  priority: 3,
+  tags: ["bugfix", "urgent"],
+  subtasks: [
+    { title: "Fix C++ bugs", done: false },
+    { title: "Fix header issues", done: true }
+  ],
+  createdAt: new Date()
+});
+
+const task2 = await db.collection('tasks').insertOne({
+  ownerId: user1.insertedId,
+  projectId: project2.insertedId,
+  title: "Finalize Design",
+  status: "in-progress",
+  priority: 2,
+  tags: ["design"],
+  subtasks: [
+    { title: "Correct UI issues", done: false },
+    { title: "Push to GitHub", done: true }
+  ],
+  createdAt: new Date()
+});
+
+const task3 = await db.collection('tasks').insertOne({
+  ownerId: user2.insertedId,
+  projectId: project3.insertedId,
+  title: "Build API",
+  status: "todo",
+  priority: 4,
+  tags: ["backend", "api"],
+  subtasks: [
+    { title: "Setup routes", done: false },
+    { title: "Connect DB", done: false }
+  ],
+  createdAt: new Date()
+});
+
+const task4 = await db.collection('tasks').insertOne({
+  ownerId: user2.insertedId,
+  projectId: project4.insertedId,
+  title: "Train Model",
+  status: "todo",
+  priority: 5,
+  tags: ["ml", "ai"],
+  subtasks: [
+    { title: "Prepare dataset", done: true },
+    { title: "Train regression model", done: false }
+  ],
+  createdAt: new Date()
+});
+
+const task5 = await db.collection('tasks').insertOne({
+  ownerId: user1.insertedId,
+  projectId: project1.insertedId,
+  title: "Write Documentation",
+  status: "todo",
+  priority: 2,
+  tags: ["docs"],
+  subtasks: [
+    { title: "Write intro", done: false },
+    { title: "Add API docs", done: false }
+  ],
+  createdAt: new Date()
+});
 //
 //notes{
 //  _id:ObjectId,
@@ -88,7 +163,37 @@ const { connect } = require('./db/connection');
 //  projectId:ObjectId,
 //  createdAt:Date(required)
 //}
-
+await db.collection('notes').insertMany([
+  {
+    name: "Meeting Notes",
+    content: "Discussed project deadlines",
+    projectId: project1.insertedId,
+    createdAt: new Date()
+  },
+  {
+    name: "Chess Ideas",
+    content: "Add AI opponent",
+    projectId: project2.insertedId,
+    createdAt: new Date()
+  },
+  {
+    name: "Random Idea",
+    content: "Standalone productivity idea",
+    createdAt: new Date()
+  },
+  {
+    name: "E-commerce UI Notes",
+    content: "Improve checkout flow",
+    projectId: project3.insertedId,
+    createdAt: new Date()
+  },
+  {
+    name: "ML Notes",
+    content: "Use normalization before training",
+    projectId: project4.insertedId,
+    createdAt: new Date()
+  }
+]);
   console.log('TODO: implement seed.js');
   process.exit(0);
 })();
